@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joyeux Noël</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎅</text></svg>">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to bottom, #1e3c72, #2a5298);
+      color: white;
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin-top: 50px;
+      font-size: 3rem;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    .button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      color: #fff;
+      background-color: #e63946;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .button:hover {
+      background-color: #d62828;
+    }
+
+    .santa {
+      position: fixed;
+      bottom: 0;
+      left: -150px;
+      width: 150px;
+      transform-origin: center;
+      display: none;
+    }
+
+    .snowflake {
+      position: fixed;
+      top: -10px;
+      font-size: 1rem;
+      color: white;
+      opacity: 0.8;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10px) translateX(0);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(100vh) translateX(-50px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Mihaja vous souhaite un Joyeux Noël à Toutes et à Tous 🎅🎄</h1>
+  <p>Que votre journée soit remplie de bonheur et de magie ✨</p>
+  <button class="button" onclick="playSanta()">Cliquer ici</button>
+
+  <!-- Traîneau -->
+  <img id="santa" class="santa" src="Img/santa.png" alt="Père Noël en traîneau">
+  <audio id="hohoho" src="audio/Hoho.wav"></audio>
+
+  <script>
+    function playSanta() {
+        const santa = document.getElementById('santa');
+        const audio = document.getElementById('hohoho');
+        santa.style.display = 'block';
+
+        let posX = -20; 
+        let posY = 0; 
+        let size = 15;
+        const screenWidth = window.innerWidth; 
+        const maxPeak = window.innerHeight / 3;
+        
+        const interval = setInterval(() => {
+            posX += 1;
+            posY = Math.sin((posX / 100) * Math.PI) * maxPeak;
+            size = 15 + (posY / maxPeak) * 5;
+            santa.style.left = posX + 'vw';
+            santa.style.bottom = posY + 'px';
+            santa.style.width = size + 'vw';
+            if (Math.abs(posY - maxPeak) < 10) {
+                if (audio.paused) {
+                    audio.currentTime = 0; 
+                    audio.play(); 
+                }
+            }
+
+            if (posX > 100) {
+                clearInterval(interval);
+                santa.style.display = 'none'; 
+            }
+        }, 30);
+    }
+
+    function createSnowflakes() {
+        const snowflake = document.createElement('div');
+        snowflake.classList.add('snowflake');
+        snowflake.textContent = '❄';
+        snowflake.style.left = Math.random() * window.innerWidth + 'px';
+        snowflake.style.animationDuration = Math.random() * 3 + 2 + 's';
+        snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+        document.body.appendChild(snowflake);
+        setTimeout(() => {
+            snowflake.remove();
+        }, 5000);
+    }
+    setInterval(createSnowflakes, 200);
+</script>
+
+</body>
+</html>
